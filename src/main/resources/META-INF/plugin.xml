@@ -1,0 +1,86 @@
+<!--
+  ~ Copyright (c) 2025 周潮. All rights reserved.
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~       https://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<idea-plugin>
+    <id>com.myth.earth.earth-web-tool</id>
+    <name>Earth Web Tool</name>
+    <vendor email="zhouchao151724@163.com" url="https://github.com/sirzc">周潮</vendor>
+
+    <description>
+        <![CDATA[
+            Earth Web Tool:an earth-series plugin that lets you browse your bookmarked URLs right inside the IDE.
+            Tabs for non-pinned sites are automatically released when closed, so no resources are wasted.
+            Initial pinned sites serve as defaults and are shown only when no custom configuration exists.
+            shortcut：alt F6, quickly open the tool window.
+            <ul>
+              <li>✏️ Custom site configuration supported</li>
+              <li>📋 Duplicate already-opened sites supported</li>
+              <li>🏠 One-click back to home supported</li>
+              <li>🚀 One-click open in browser supported</li>
+            </ul>
+            <hr>
+            Earth Web Tool：是earth系列插件之一，主要用于在IDE窗口内浏览收藏的URL站点。<br>
+            非设置站点展开关闭后，资源会自动回收，无需担心资源占用。初始设置站点为默认设置，仅无配置下显示。
+            快捷方式：alt F6，快速打开工具窗口
+            <ul>
+                <li>✏️支持自定义站点配置</li>
+                <li>📋支持复制已打开站点</li>
+                <li>🏠支持一键回到主页</li>
+                <li>🚀支持一键浏览器打开</li>
+            </ul>
+        ]]>
+    </description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <idea-version since-build="203.5981.155"/>
+
+    <projectListeners>
+        <listener class="com.myth.earth.web.listener.CloudPluginListener"
+                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </projectListeners>
+
+    <applicationListeners>
+        <listener class="com.myth.earth.web.listener.JcefAppLifecycleListener"
+                  topic="com.intellij.ide.AppLifecycleListener"/>
+    </applicationListeners>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <projectService serviceImplementation="com.myth.earth.web.service.BrowserProjectService" />
+
+        <toolWindow id="EarthWebTool.toolwindow"
+                    factoryClass="com.myth.earth.web.ui.toolwindow.BrowserToolWindowFactory"
+                    icon="/icons/website@earth.svg"
+                    anchor="bottom"
+                    doNotActivateOnStart="true"
+                    canCloseContents="true"/>
+        />
+    </extensions>
+
+    <actions>
+        <group id="EarthWebTool.Website">
+            <action class="com.myth.earth.web.action.browser.GoHomeAction" text="主页" icon="AllIcons.Nodes.HomeFolder"/>
+            <separator/>
+            <action class="com.myth.earth.web.action.browser.BrowserSettingAction" text="设置" icon="AllIcons.Actions.InlayGear"/>
+            <action class="com.myth.earth.web.action.browser.RefreshPageAction" text="刷新" icon="AllIcons.Actions.BuildLoadChanges"/>
+            <action class="com.myth.earth.web.action.browser.ExternalOpenAction" text="浏览器打开" icon="AllIcons.ToolbarDecorator.Export"/>
+            <action class="com.myth.earth.web.action.browser.CopyCurrUrlAction" text="复制地址" icon="AllIcons.Actions.Copy"/>
+        </group>
+
+        <action id="EarthWebTool.OpenWebsite" class="com.myth.earth.web.action.OpenBrowserAction" text="打开Website窗口">
+            <keyboard-shortcut first-keystroke="alt F6" keymap="$default"/>
+        </action>
+    </actions>
+</idea-plugin>
